@@ -1,91 +1,76 @@
-// const { $ } = require('@wdio/globals')
-const Page = require('./mainPage');
 const testData = require('../testdata/inputFile')
 
-
-class LoginPage extends Page {
+class LoginPage {
     get registerLink() {
         return $("//a[text()='Register']")
     }
-    get firstName(){
+    get firstName() {
         return $("#customer\\.firstName")
     }
-    get lastName(){
+    get lastName() {
         return $("#customer\\.lastName")
     }
-    get address(){
+    get address() {
         return $("#customer\\.address\\.street")
     }
-    get city(){
+    get city() {
         return $("#customer\\.address\\.city")
     }
-    get state(){
+    get state() {
         return $("#customer\\.address\\.state")
     }
-    get zipCode(){
+    get zipCode() {
         return $("#customer\\.address\\.zipCode")
     }
-    get phoneNumber(){
+    get phoneNumber() {
         return $("#customer\\.phoneNumber")
     }
-    get ssnNumber(){
+    get ssnNumber() {
         return $("#customer\\.ssn")
     }
-    get userName(){
+    get userName() {
         return $("#customer\\.username")
     }
-    get password(){
+    get password() {
         return $("//input[@id='customer.password']")
     }
-    get confirmPassword(){
+    get confirmPassword() {
         return $("#repeatedPassword")
     }
-    get registerButton(){
+    get registerButton() {
         return $("//input[@value='Register']")
     }
-
-
-
-
-
-    async registerNewUser(){
-        await this.firstName.setValue(testData.firstName)
-        await this.lastName.setValue(testData.lastName)
-        await this.address.setValue(testData.address);
-        await this.city.setValue(testData.city);
-        await this.state.setValue(testData.state);
-        await this.zipCode.setValue(testData.zipCode);
-        await this.phoneNumber.setValue(testData.phoneNumber);
-        await this.ssnNumber.setValue(testData.ssnNumber);
-        await this.userName.setValue(testData.userName);
-        await this.password.setValue(testData.password);
-        await this.confirmPassword.setValue(testData.password);
-        await this.registerButton.click()
-    }
-
-
-
-    // get username () {
-    //     return $("//input[@name='username']");
-    // }
-
-    // get password () {
-    //     return $("//input[@name='password']");
-    // }
-
-    get btnLogin () {
+    get btnLogin() {
         return $('.button');
     }
-    async login (username, password) {
-        await this.inputUsername.setValue(username);
-        await this.inputPassword.setValue(password);
-        await this.btnSubmit.click();
+
+    async getTitle() {
+        return await browser.getTitle();
     }
-    open () {
-        return super.open();
+    async registerNewUser() {
+        try {
+            await this.firstName.setValue(testData.firstName)
+            await this.lastName.setValue(testData.lastName)
+            await this.address.setValue(testData.address);
+            await this.city.setValue(testData.city);
+            await this.state.setValue(testData.state);
+            await this.zipCode.setValue(testData.zipCode);
+            await this.phoneNumber.setValue(testData.phoneNumber);
+            await this.ssnNumber.setValue(testData.ssnNumber);
+            await this.userName.setValue(testData.userName);
+            await this.password.setValue(testData.password);
+            await this.confirmPassword.setValue(testData.password);
+            await this.registerButton.click()
+        } catch (error) {
+            console.log("Not able to register a user");
+        }
     }
-    async clickRegister(){
-        await this.registerLink.click()
+    async clickRegister() {
+        try {
+            await this.registerLink.click()
+        } catch (error) {
+            console.log("Not able to click on register")
+        }
     }
 }
 

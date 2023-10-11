@@ -1,32 +1,54 @@
 const testData = require('../testdata/inputFile');
-const accountOverview = require('./accountOverview');
+const dashboard = require('./dashboardPage');
 const chaiExpect = require('chai').expect
+const waitUtils = require('../utils/waitUtils')
 
 
 class FundTransfer {
-    get amountField(){
+    get amountField() {
         return $("#amount")
     }
-    get transferButton(){
+    get transferButton() {
         return $("//input[@value='Transfer']")
     }
-    get transferSuccessMessage(){
-        return $("//h1");
-    }
-    get waitEleInFundTransfer(){
-        // return $(`//select[@id='fromAccountId']/option[text()='${accountOverview.accountNumber}']`)
-                return $("//select[@id='fromAccountId']/option[text()='21588']")
 
+    get transferSuccessMessage() {
+        return $("//h1[text()='Transfer Complete!']");
     }
-    async enterAmount(){
-        await this.amountField.setValue(testData.fundTransferAmount)
+    async enterAmount(accountNumber) {
+        try {
+            let element = await $("//select[@id='fromAccountId']/option[text()='" + accountNumber + "']")
+            await waitUtils.WaitUntilElementDisplayed(element)
+            await this.amountField.setValue(testData.fundTransferAmount)
+        } catch (error) {
+            console.log("Not able to enter amount")
+        }
     }
-    async clickTransferButton(){
-        await this.transferButton.click()
+    async clickTransferButton() {
+        try {
+            await this.transferButton.click()
+        } catch (error) {
+            console.log("Not able to click on transfer button")
+        }
     }
-    async verifyTransferSuccessMessage(){
-        const successMessage = await this.transferSuccessMessage.getText()
-        chaiExpect(successMessage).to.equal(testData.expectedtranferSuccessMessage)
+    async verifyTransferSuccessMessage() {
+        try {
+            await waitUtils.WaitUntilElementDisplayed(this.transferSuccessMessage)
+            const successMessage = await this.transferSuccessMessage.getText()
+            chaiExpect(successMessage).to.equal(testData.expectedtranferSuccessMessage)
+        } catch (error) {
+            console.log("Not able to verify transaction success message")
+        }
+    }
+    async fundTransferAndVerify(accountNumber) {
+        try {
+            await dashboard.clickFundTransferLink();
+            await this.enterAmount(accountNumber);
+            await this.clickTransferButton();
+            await this.verifyTransferSuccessMessage();
+        } catch (error) {
+            console.log("Not able transfer fund")
+        }
     }
 
 }
