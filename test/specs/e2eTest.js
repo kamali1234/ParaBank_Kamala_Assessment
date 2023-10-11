@@ -9,8 +9,8 @@ const alert = require('../utils/alert');
 const expectUtils = require('../utils/expectUtils');
 const testData = require('../testdata/inputFile');
 
-describe('test', () => {
-    it('test 1', async () => {
+describe('End to end testing', () => {
+    it('Validating transaction table', async () => {
         // Open the URL https://parabank.parasoft.com/
         await Mainpage.open()
         // Wait for page title (ParaBank | Welcome | Online Banking) to be visible. 
